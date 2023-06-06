@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   ports:
-  - port: 80
+  - port: 8008
     targetPort: 80
   type: ClusterIP
   selector:
