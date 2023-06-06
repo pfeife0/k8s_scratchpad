@@ -1,0 +1,44 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    meta.helm.sh/release-name: traefik
+    meta.helm.sh/release-namespace: default
+  labels:
+    app.kubernetes.io/instance: traefik-default
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: traefik
+    helm.sh/chart: traefik-23.0.1
+  name: traefik-dashboard
+  namespace: default
+spec:
+  entryPoints:
+    - traefik
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+      services:
+        - kind: TraefikService
+          name: api@internal
+      middlewares:
+        - name: auth-dashboard
+          namespace: default
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: auth-dashboard
+  namespace: default
+spec:
+  basicAuth:
+    secret: htpasswd-dashboard
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: htpasswd-dashboard
+  namespace: default
+data:
+  auth: ZGFzaGJvYXJkOiQyeSQxMCRtMkZ6N0ZUTmhrcy55alRWL1dYalF1U0NLS2FBN0hGa0t6YnRHVWg4Sjg1NUM5Yml0bnFMaQ==

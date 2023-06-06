@@ -1,0 +1,45 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: wishlist-ingress
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/app`)
+      middlewares:
+        - name: app-stripprefix
+          namespace: default
+      services:
+        - name: wishlist-app-service
+          port: 8080
+    - kind: Rule
+      match: PathPrefix(`/catalog`)
+      middlewares:
+        - name: catalog-stripprefix
+          namespace: default
+        - name: basic-auth
+          namespace: default
+      services:
+        - name: wishlist-catalog-service
+          port: 8081
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: basic-auth
+  namespace: default
+spec:
+  basicAuth:
+    secret: htpasswd
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: htpasswd
+  namespace: default
+data:
+  auth: d2lzaGxpc3Q6JGFwcjEkcm5zM3Fkb2okOERjSS9uMUxMckhpcmp6eE02eGJuMQ==
