@@ -22,8 +22,8 @@ metadata:
   name: guestbook
   namespace: default
 spec:
-  stripPrefix:
-    prefixes:
+  replacePath:
+    path:
       - /guestbook
 
           
