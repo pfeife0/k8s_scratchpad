@@ -23,7 +23,6 @@ metadata:
   namespace: default
 spec:
   replacePath:
-    path:
-      - /guestbook
+    path: /guestbook
 
           
