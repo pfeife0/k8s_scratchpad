@@ -22,7 +22,6 @@ metadata:
   name: guestbook
   namespace: default
 spec:
-  replacePath:
-    path: /
-
-          
+  replacePathRegex:
+    regex: ^/guestbook/(.*)
+    replacement: /$1
